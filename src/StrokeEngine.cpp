@@ -41,7 +41,7 @@ void StrokeEngine::begin(machineGeometry *physics, motorProperties *motor) {
     }
     Serial.println("Servo initialized");
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Stroke Engine State: " + verboseState[_state]);
 #endif
 }
@@ -57,7 +57,7 @@ void StrokeEngine::setSpeed(float speed, bool applyNow = false) {
 
         patternTable[_patternIndex]->setTimeOfStroke(_timeOfStroke);
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("setTimeOfStroke: " + String(_timeOfStroke, 2));
 #endif
 
@@ -66,7 +66,7 @@ void StrokeEngine::setSpeed(float speed, bool applyNow = false) {
             // set flag to apply update from stroking thread
             _applyUpdate = true;
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Apply New Settings Now");
 #endif
         }
@@ -90,7 +90,7 @@ void StrokeEngine::setDepth(float depth, bool applyNow = false) {
 
         patternTable[_patternIndex]->setDepth(_depth);
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("setDepth: " + String(_depth));
 #endif
         // When running a pattern and immediate update requested: 
@@ -98,7 +98,7 @@ void StrokeEngine::setDepth(float depth, bool applyNow = false) {
             // set flag to apply update from stroking thread
             _applyUpdate = true;
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Apply New Settings Now");
 #endif
         }
@@ -128,7 +128,7 @@ void StrokeEngine::setStroke(float stroke, bool applyNow = false) {
 
         patternTable[_patternIndex]->setStroke(_stroke);
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("setStroke: " + String(_stroke));
 #endif
     
@@ -137,7 +137,7 @@ void StrokeEngine::setStroke(float stroke, bool applyNow = false) {
             // set flag to apply update from stroking thread
             _applyUpdate = true;
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Apply New Settings Now");
 #endif
         }
@@ -167,7 +167,7 @@ void StrokeEngine::setSensation(float sensation, bool applyNow = false) {
 
         patternTable[_patternIndex]->setSensation(_sensation);
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("setSensation: " + String(_sensation));
 #endif
 
@@ -176,7 +176,7 @@ void StrokeEngine::setSensation(float sensation, bool applyNow = false) {
             // set flag to apply update from stroking thread
             _applyUpdate = true;
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Apply New Settings Now");
 #endif
         }
@@ -213,7 +213,7 @@ bool StrokeEngine::setPattern(int patternIndex, bool applyNow = false) {
                 // set flag to apply update from stroking thread
                 _applyUpdate = true;
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
             Serial.println("Apply New Settings Now");
 #endif
             }
@@ -225,7 +225,7 @@ bool StrokeEngine::setPattern(int patternIndex, bool applyNow = false) {
         // Reset index counter
         _index = 0; 
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("setPattern: [" + String(_patternIndex) + "] " + patternTable[_patternIndex]->getName());
     Serial.println("setTimeOfStroke: " + String(_timeOfStroke, 2));
     Serial.println("setDepth: " + String(_depth));
@@ -236,7 +236,7 @@ bool StrokeEngine::setPattern(int patternIndex, bool applyNow = false) {
     }
 
     // Return false on no match
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Failed to set pattern: " + String(_patternIndex));
 #endif
     return false;   
@@ -273,7 +273,7 @@ bool StrokeEngine::startPattern() {
         }
 
         
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.print(" _timeOfStroke: " + String(_timeOfStroke));
         Serial.print(" | _depth: " + String(_depth));
         Serial.print(" | _stroke: " + String(_stroke));
@@ -296,7 +296,7 @@ bool StrokeEngine::startPattern() {
             vTaskResume(_taskStrokingHandle);
         }
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Started motion task");
         Serial.println("Stroke Engine State: " + verboseState[_state]);
 #endif
@@ -305,7 +305,7 @@ bool StrokeEngine::startPattern() {
 
     } else {
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Failed to start motion");
 #endif
         return false;
@@ -324,7 +324,7 @@ void StrokeEngine::stopMotion() {
         servo->applySpeedAcceleration();
         servo->stopMove();
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Motion stopped");
 #endif
 
@@ -337,7 +337,7 @@ void StrokeEngine::stopMotion() {
         }
     }
     
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Stroke Engine State: " + verboseState[_state]);
 #endif
 }
@@ -380,7 +380,7 @@ void StrokeEngine::enableAndHome(endstopProperties *endstop, float speed) {
         &_taskHomingHandle,             // Task handle
         1                               // Have it on application core
     ); 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Homing task started");
 #endif
 
@@ -408,14 +408,14 @@ void StrokeEngine::thisIsHome(float speed) {
         _isHomed = true;
         _state = READY;
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("This is Home now");
 #endif
 
         return;
     }
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Manual homing failed. Not in state UNDEFINED");
 #endif
 
@@ -423,7 +423,7 @@ void StrokeEngine::thisIsHome(float speed) {
 
 bool StrokeEngine::moveToMax(float speed) {
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Move to max");
 #endif
 
@@ -442,7 +442,7 @@ bool StrokeEngine::moveToMax(float speed) {
             _callbackTelemetry(float(_maxStep / _motor->stepsPerMillimeter), speed, false);
         } 
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Stroke Engine State: " + verboseState[_state]);
 #endif
 
@@ -457,7 +457,7 @@ bool StrokeEngine::moveToMax(float speed) {
 
 bool StrokeEngine::moveToMin(float speed) {
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Move to min");
 #endif
 
@@ -476,7 +476,7 @@ bool StrokeEngine::moveToMin(float speed) {
             _callbackTelemetry(float(_minStep / _motor->stepsPerMillimeter), speed, false);
         } 
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Stroke Engine State: " + verboseState[_state]);
 #endif
 
@@ -490,7 +490,7 @@ bool StrokeEngine::moveToMin(float speed) {
 }
 
 bool StrokeEngine::setupDepth(float speed, bool fancy) {
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Move to Depth");
 #endif
     // store fanciness
@@ -518,7 +518,7 @@ bool StrokeEngine::setupDepth(float speed, bool fancy) {
         // set return value to true
         allowed = true;
     }
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Stroke Engine State: " + verboseState[_state]);
 #endif
     return allowed;
@@ -541,7 +541,7 @@ void StrokeEngine::disable() {
         _taskHomingHandle = NULL;
     }
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Servo disabled. Call home to continue.");
     Serial.println("Stroke Engine State: " + verboseState[_state]);
 #endif
@@ -652,7 +652,7 @@ void StrokeEngine::_homingProcedure() {
         servo->disableOutputs();
         _state = UNDEFINED;
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Homing failed");
 #endif
 
@@ -660,7 +660,7 @@ void StrokeEngine::_homingProcedure() {
         // Set state to ready
         _state = READY;
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("Homing succeeded");
 #endif
     }
@@ -675,7 +675,7 @@ void StrokeEngine::_homingProcedure() {
         _callbackTelemetry(0.0, 0.0, false);
     }
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("Stroke Engine State: " + verboseState[_state]);
 #endif
 
@@ -827,7 +827,7 @@ void StrokeEngine::_setupDepths() {
         // map sensation into the interval [depth-stroke, depth]
         depth = map(_sensation, -100, 100, _depth - _stroke, _depth);
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
         Serial.println("map sensation " + String(_sensation)
             + " to interval [" + String(_depth - _stroke)
             + ", " + String(_depth) 
@@ -845,7 +845,7 @@ void StrokeEngine::_setupDepths() {
             false);
     } 
 
-#ifdef DEBUG_TALKATIVE
+#if DEBUG_STROKE_ENGINE
     Serial.println("setup new depth: " + String(depth));
 #endif
 }
