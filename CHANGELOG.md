@@ -1,3 +1,9 @@
+# Release 0.3.1
+- Rename #define toggles for StrokeEngine to have STROKE_ENGINE in the name so that when overriding output values in other projects, it is clear what the #define does.
+  - `DEBUG_TALKATIVE` changed to `DEBUG_STROKE_ENGINE_VERBOSE`
+  - `DEBUG_STROKE` changed to `DEBUG_STROKE_ENGINE_STROKE`
+  - `DEBUG_CLIPPING` changed to `DEBUG_STROKE_ENGINE_CLIPPING`
+
 # Release 0.3.0
 - set and get functions for maximum speed and maximum acceleration. Allows to change these limits during runtime.
 - Renamed `#define DEBUG_VERBOSE` to `#define DEBUG_TALKATIVE` to make StrokeEngine play nice with WifiManager.
